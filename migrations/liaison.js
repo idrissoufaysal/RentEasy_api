@@ -2,7 +2,7 @@ const sequelize=require('sequelize')
 
 const Composant=require("../models/composant");
 const Home=require("../models/homes");
-const User=require("../models/user");
+const User=require("../models/user").default;
 const Image=require("../models/image");
 const Plainte=require("../models/plainte");
 const Equipement=require("../models/equipement");

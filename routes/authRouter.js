@@ -1,89 +1,66 @@
-const router = require("express").Router();
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
-const auth = require("./middlware/jwtAuth");
-const Admin=require('../models/user')
+const  User =require( "../models/user.js");
+const jwt =require( "jsonwebtoken");
+const bcrypt =require( "bcrypt");
+const jwtSecrete = "fnidaf";
+const express =require( "express");
 
-const secretKey = "jsonwebtoken";
+const router = express.Router();
 
-const User = require("../models/user");
-
-//Rgister
+//Register
 router.post("/register", async (req, res) => {
-  try {
-    const existingUser = await User.findOne({
-      where: {
-        email: req.body.email,
-      },
-    });
-
-    if (existingUser) {
-      res.status(404).json({error:`l\'utilisateur ${email}, exist dejas`});
-    }
-
-    const salt = await bcrypt.genSalt(10);
-    const hashPass = await bcrypt.hash(req.body.password, salt);
-    const newUSer = User.create({
-      nom: req.body.nom,
-      prenom: req.body.prenom,
-      email: req.body.email,
-      telephone: req.body.telephone,
-      password: hashPass,
-      adminId
-    });
-
-    res.json({ status: true, success: "utilisateur inscrit avec succes" });
-  } catch (e) {
-    res.status(500).json(e.message);
+  const { email, nom,prenom, password } = req.body;
+  const hashPass = bcrypt.hashSync(password, 10);
+  //If user exit
+  const user = await User.findOne({ where: { email: email } });
+  if (user) {
+    return res
+      .status(401)
+      .json({ message: `l'utilisateur ${user.email} existe dejas` });
   }
-});
 
+  await User.create({
+    nom:nom,
+    prenom:prenom,
+    email: email,
+    password: hashPass,
+  }).then((user) =>
+    res.status(200).json({ message: "Compte cree avec success" })
+  );
+});
 
 //Login
-router.post("/login", async (req, res) => { 
+router.post("/login", async (req, res) => {
   const { email, password } = req.body;
-  try {
-    const user = await User.findOne({
-      where: { email }, 
-    });
-
-    if (!user) {
-      return res.status(400).json({
-        error:'email ou mot de pass incorrect !!',
-        status:false
+  //If user exita
+  const user = await User.findOne({ where: { email: email } });
+  if (!user) {
+    return res.status(401).json({ message: "email or password incorrect" });
+  }
+  const isPass = await bcrypt.compare(password, user.password);
+  if (!isPass) {
+    return res.status(400).json({ message: "mot de pass incorrect" });
+  } else {
+    const token = jwt.sign({ id: user.id }, "secretKey");
+    const { password, ...other } = user.dataValues;
+    return res
+      .cookie("accessToken", token, {
+        httpOnly: true,
+      })
+      .status(200)
+      .json({
+        user:other,
+        token:token  
       });
-    }   
-       
-    const validate = await bcrypt.compare(password, user.password);   
-    if (!validate) {
-      res.status(400).json({
-        status:false,
-        error:'email ou mot de pass incorrect !!'});
-    } else { 
-      const token = jwt.sign(
-        { _id: user.id, email: user.email }, 
-        process.env.SECRET_KEY,
-        {
-          expiresIn: "5h", // Durée de validité du JWT (par exemple, 1 heure)
-        }
-      );
-      return res.status(200).json({ status: true, token: token });
-    }
-  } catch (e) {
-    res.status(500).json(e.message);
   }
 });
 
-
-//Logout  //Deconnection
 router.post("/logout", async (req, res) => {
   res
-    .clearCookie("access_token", {
-      sameSite: "none",
+    .clearCookie("accessToken", {
       secure: true,
+      sameSite: "none",
     })
     .status(200)
-    .json("utilisateur deconnecter");
+    .json("l'utilisateur a ete deconnecte");
 });
-
-module.exports = router;
+module.exports= router;

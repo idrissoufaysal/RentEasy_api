@@ -1,6 +1,6 @@
 const Admin=require('../models/admin')
 const Conversation=require('../models/conversation')
-const User=require('../models/user')
+const User=require('../models/user').default
 const Message=require('../models/message')
 
 

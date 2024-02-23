@@ -1,7 +1,7 @@
-const {Sequelize, DataTypes} =require('sequelize')
-const sequelize=require('../db/db')
+const   DataTypes  =require( 'sequelize');
+const  sequelize =require( '../db/db.js');
 
-const User = sequelize.define('users', {
+const User =sequelize.define('users', {
 
   nom: {
       type: DataTypes.STRING,
@@ -35,4 +35,4 @@ const User = sequelize.define('users', {
      }
 });
 
-    module.exports=User
+    module.exports= User

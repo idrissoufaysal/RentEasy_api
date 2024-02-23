@@ -10,7 +10,7 @@ const Equipement=sequelize.define('equipement',{
       equipement: {
         type: DataTypes.STRING, 
         allowNull: false
-      },
+      }, 
       
 })
 
