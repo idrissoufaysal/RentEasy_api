@@ -29,10 +29,7 @@ const Maison= sequelize.define('maisons',{
     },
 
     //maison Louer True : False 
-    isMenber:{
-        type:DataTypes.BOOLEAN,
-        default:false
-    },
+   
     
     price:{
         type:DataTypes.INTEGER,
