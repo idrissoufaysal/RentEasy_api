@@ -9,7 +9,7 @@ const authenticateUser = require("../middlware/jwtAuth");
 const router = express.Router();
 
 /* AFFICHER TOUS LES MAISONS */
-router.get("/",authenticateUser, async (req, res) => {
+router.get("/", async (req, res) => {
   try {
     const maisons = await Home.findAll({
       include: Image,

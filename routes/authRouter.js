@@ -34,11 +34,11 @@ router.post("/login", async (req, res) => {
   //If user exita
   const user = await User.findOne({ where: { email: email } });
   if (!user) {
-    return res.status(401).json({ message: "email or password incorrect" });
+    return res.status(401).json({ message: "email ou mot de pass incorrect" });
   }
   const isPass = await bcrypt.compare(password, user.password);
   if (!isPass) {
-    return res.status(400).json({ message: "mot de pass incorrect" });
+    return res.status(400).json({ message: "email ou mot de pass incorrect" });
   } else {
     const token = jwt.sign({ id: user.id }, "secretKey");
     const { password, ...other } = user.dataValues;

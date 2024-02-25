@@ -23,7 +23,7 @@ const connexion=require('./migrations/liaison');
 const app=express() 
 
 //Les Midllwares de configuration
-const hostname = '0.0.0.0';  
+const hostname = '10.10.10.55';  
   
 const port =4000
 
