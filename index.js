@@ -1,11 +1,9 @@
 const express=require('express');
 const db= require('./db/db')
-const admin=require('./models/admin')
+const User=require('./models/user.js')
 require('dotenv').config()
 const cors=require('cors')
 const http = require('http');
-
-require('./models/paiement')
 
 //? Appel des controlleurs
 const homeRoutes=require('./routes/homeRouter')
@@ -17,24 +15,22 @@ const imageRoutes=require('./routes/imageRouter')
 const conversationRoutes=require('./routes/conversationRouter')
 
 //! laison des tables
-const connexion=require('./migrations/liaison');
-
-
+require('./migrations/liaison.js')
 const app=express() 
 
 //Les Midllwares de configuration
-const hostname = '10.10.10.55';  
+const hostname = '192.168.0.107';  
   
 const port =4000
 
-//*Les middllware 
-app.use(cors()); 
+//*Les middllware  
+app.use(cors());      
 app.use(express.json()) 
 app.use(express.static("public"))
 const server = http.createServer(app);
 //const io = socketIo(server); 
 const io = require('socket.io')(server);
-   
+     
            
 //*Definition des url des controlleurs
 app.use('/homes',homeRoutes);
@@ -55,7 +51,7 @@ db.sync(/*{force:true}*/)
 })
 
  
-io.on('connection..',(socket)=>{
+io.on('connection',(socket)=>{
   console.log("Connected successfully", socket.id);
   socket.on('disconnect',()=>{
     console.log("Disconnected",socket.id);

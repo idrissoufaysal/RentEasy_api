@@ -41,13 +41,14 @@ router.post("/login", async (req, res) => {
     return res.status(400).json({ message: "email ou mot de pass incorrect" });
   } else {
     const token = jwt.sign({ id: user.id }, "secretKey");
-    const { password, ...other } = user.dataValues;
+    const { password, ...other } = user.dataValues; 
     return res
       .cookie("accessToken", token, {
         httpOnly: true,
       })
       .status(200)
       .json({
+        message:"Vous etes connecter",
         user:other,
         token:token  
       });
@@ -64,3 +65,5 @@ router.post("/logout", async (req, res) => {
     .json("l'utilisateur a ete deconnecte");
 });
 module.exports= router;
+ 
+

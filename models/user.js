@@ -28,11 +28,7 @@ const User =sequelize.define('users', {
     //  profileImage:{
     //     type:DataTypes.STRING,
 
-    //  },
-     isLocate:{
-      type:DataTypes.BOOLEAN,
-      default:false
-     }
+    
 });
 
     module.exports= User

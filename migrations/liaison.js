@@ -2,7 +2,7 @@ const sequelize=require('sequelize')
 
 const Composant=require("../models/composant");
 const Home=require("../models/homes");
-const User=require("../models/user").default;
+const User=require("../models/user");
 const Image=require("../models/image");
 const Plainte=require("../models/plainte");
 const Equipement=require("../models/equipement");
@@ -14,11 +14,11 @@ const Conversation=require('../models/conversation')
 ///////////////////////////////////////////////////////////
                            //?Admin liaison
 
-//*Liaison de Adimin et maison
+//*Liaison de user et maison
 try {
-    Admin.hasMany(Home)
-    Home.belongsTo(Admin)
-    console.log('Liaison de user de plainte reuissi avec succes');
+    User.hasMany(Home)
+    Home.belongsTo(User)
+    console.log('Liaison de user de maison reuissi avec succes');
 } catch (e) {
 console.log(e);
 }
