@@ -4,6 +4,7 @@ const User=require('./models/user.js')
 require('dotenv').config()
 const cors=require('cors')
 const http = require('http');
+const dotenv=require('dotenv')
 
 //? Appel des controlleurs
 const homeRoutes=require('./routes/homeRouter')
@@ -20,8 +21,9 @@ const app=express()
 
 //Les Midllwares de configuration
 const hostname = '192.168.0.107';  
+dotenv.config()
   
-const port =4000
+const port =process.env.PORT ||  4000
 
 //*Les middllware  
 app.use(cors());      
@@ -30,7 +32,6 @@ app.use(express.static("public"))
 const server = http.createServer(app);
 //const io = socketIo(server); 
 const io = require('socket.io')(server);
-     
            
 //*Definition des url des controlleurs
 app.use('/homes',homeRoutes);
